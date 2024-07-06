@@ -1,22 +1,10 @@
 import React from "react";
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
-import { Button } from "react-bootstrap";
-import Header from "./components/Header";
+import router from "./router/routes";
 
 function App() {
-  return (
-    <>
-      <Header />
-      <main className="flex justify-center">
-        <div className="flex flex-col items-center">
-          <h1 className="text-3xl font-bold underline text-clifford">
-            HorFunNy
-          </h1>
-          <Button>Test</Button>
-        </div>
-      </main>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
