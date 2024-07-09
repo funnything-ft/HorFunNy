@@ -32,3 +32,5 @@ services:
     container_name: hfn-backend
     volumes:
       - ./backend:/app/backend
+    ports:
+      - "8000:8000"
