@@ -1,5 +1,9 @@
 frontend/node_modules
 node_modules
+.pre-commit-config.yaml
+eslint.config.mjs
 backend/static
 backend/media
+style.yapf
 yarn.lock
+package.json
