@@ -1,0 +1,10 @@
+[style]
+allow_multiline_dictionary_keys=True
+allow_split_before_default_or_named_assigns=False
+allow_split_before_dict_value=False
+column_limit=79
+continuation_indent_width=2
+force_multiline_dict=True
+indent_width=2
+space_between_ending_comma_and_closing_bracket=False
+split_complex_comprehension=True
