@@ -23,7 +23,7 @@ class LoginView(generics.CreateAPIView):
                             status=status.HTTP_200_OK)
         else:
             return Response({'message': 'Invalid credentials'},
-                            status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RefreshSessionView(APIView):
