@@ -10,4 +10,17 @@ const apiInstance = axios.create({
   },
 });
 
+apiInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      return Promise.resolve(error.response);
+    } else {
+      return Promise.reject(error);
+    }
+  },
+);
+
 export default apiInstance;
