@@ -3,3 +3,4 @@ node_modules
 backend/static
 backend/media
 yarn.lock
+backend/db.sqlite3
