@@ -33,3 +33,8 @@ class RefreshSessionView(APIView):
         request.session.set_expiry(settings.SESSION_COOKIE_AGE)
         session_expiry = request.session.get_expiry_date()
         return Response({'session_expiration': session_expiry}, status=200)
+
+
+class RegisterView(generics.CreateAPIView):
+    permission_classes = (AllowAny, )
+    serializer_class = serializers.RegisterSerializer
