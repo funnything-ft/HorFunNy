@@ -7,4 +7,5 @@ urlpatterns = [
     path('refresh/session',
          views.RefreshSessionView.as_view(),
          name='refresh_token'),
+    path('register/', views.RegisterView.as_view(), name='register')
 ]
