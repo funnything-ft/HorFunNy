@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.contrib.auth import authenticate, login
 from rest_framework import generics, status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from . import serializers
 
@@ -22,3 +24,12 @@ class LoginView(generics.CreateAPIView):
         else:
             return Response({'message': 'Invalid credentials'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class RefreshSessionView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+        session_expiry = request.session.get_expiry_date()
+        return Response({'session_expiration': session_expiry}, status=200)
