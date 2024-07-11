@@ -3,7 +3,7 @@ import Layout, { checkSessionExpiration } from "../pages/Layout";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Login, { action as loginAction } from "../pages/Login";
-import Register from "../pages/Register";
+import Register, { action as registerAction } from "../pages/Register";
 import { action as logoutAction } from "../pages/Logout";
 
 const router = createBrowserRouter([
@@ -25,6 +25,7 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+        action: registerAction,
       },
       {
         path: "logout",
