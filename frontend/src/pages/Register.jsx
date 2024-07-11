@@ -1,10 +1,14 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, json, redirect, useActionData } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import UIInput from "../components/UIInput";
 import UIButton from "../components/UIButton";
+import apiInstance from "../utils/axios";
 
 function Register() {
+  const data = useActionData();
+  const errorMessage = data?.data;
+  console.log(errorMessage);
   return (
     <Container className='flex items-center justify-center min-h-screen sm:w-1/2 md:w-1/3 lg:w-1/4"'>
       <div>
@@ -24,6 +28,13 @@ function Register() {
             className="mb-4"
           />
           <UIInput
+            label="Email"
+            id="email"
+            type="email"
+            placeholder="abc@gmail.com"
+            className="mb-4"
+          />
+          <UIInput
             label="Password"
             id="password"
             type="password"
@@ -37,9 +48,15 @@ function Register() {
             placeholder="Re-enter password"
             className="mb-4"
           />
+          {errorMessage &&
+            Object.entries(errorMessage).map(([key, value]) => (
+              <p key={key} className="text-danger m-0 text-center">
+                {key}: {value}
+              </p>
+            ))}
           <div className="flex justify-center">
             <UIButton
-              className="w-2/3"
+              className="w-2/3 mt-3"
               variant="primary"
               size="lg"
               type="submit"
@@ -54,3 +71,28 @@ function Register() {
 }
 
 export default Register;
+
+export async function action({ request }) {
+  const data = await request.formData();
+
+  const credential = {
+    username: data.get("username"),
+    password: data.get("password"),
+    password2: data.get("confirm-password"),
+    email: data.get("email"),
+  };
+
+  return apiInstance
+    .post("register/", credential)
+    .then((res) => {
+      console.log(res);
+      if (res.status === 201) {
+        return redirect("/login");
+      } else if (res.status === 400) {
+        return res;
+      }
+    })
+    .catch((err) => {
+      throw json({ message: err.response.data.message }, { status: 500 });
+    });
+}
