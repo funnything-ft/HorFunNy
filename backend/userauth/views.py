@@ -31,12 +31,15 @@ class LoginView(generics.CreateAPIView):
             expiry_timestamp = request.session.get_expiry_date()
             time_remaining = (expiry_timestamp -
                               timezone.now()).total_seconds()
-            return Response({
-                'status': 'authenticated',
-                'time_remaining': time_remaining
-            })
+            return Response(
+                {
+                    'isAuthenticated': True,
+                    'time_remaining': time_remaining
+                },
+                status=status.HTTP_200_OK)
         else:
-            return Response({'status': 'not_authenticated'}, status=401)
+            return Response({'isAuthenticated': False},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
 class RefreshSessionView(APIView):
