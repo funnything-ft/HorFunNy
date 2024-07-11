@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -24,6 +25,18 @@ class LoginView(generics.CreateAPIView):
         else:
             return Response({'message': 'Invalid credentials'},
                             status=status.HTTP_401_UNAUTHORIZED)
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            expiry_timestamp = request.session.get_expiry_date()
+            time_remaining = (expiry_timestamp -
+                              timezone.now()).total_seconds()
+            return Response({
+                'status': 'authenticated',
+                'time_remaining': time_remaining
+            })
+        else:
+            return Response({'status': 'not_authenticated'}, status=401)
 
 
 class RefreshSessionView(APIView):
