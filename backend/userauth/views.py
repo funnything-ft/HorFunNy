@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -54,3 +54,11 @@ class RefreshSessionView(APIView):
 class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny, )
     serializer_class = serializers.RegisterSerializer
+
+
+class LogoutView(APIView):
+
+    def post(self, request):
+        logout(request)
+        return Response({'message': 'Logged out successfully'},
+                        status=status.HTTP_200_OK)
