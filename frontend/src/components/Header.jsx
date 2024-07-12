@@ -1,40 +1,53 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import { Form, useFetcher } from "react-router-dom";
+import { Container, Navbar, Nav, Offcanvas } from "react-bootstrap";
+import { useFetcher } from "react-router-dom";
 import UIButton from "./UIButton";
+import HeaderNavLink from "./HeaderNavLink";
 
 function Header({ isAuthenticated }) {
   const fetcher = useFetcher();
   let content = (
-    <>
-      <Nav.Link href="/">Home</Nav.Link>
-      <Nav.Link href="/login">Login</Nav.Link>
-      <Nav.Link href="/register">Register</Nav.Link>
-    </>
+    <Nav className="me-auto flex-row items-center">
+      <HeaderNavLink to="/">Home</HeaderNavLink>
+      <HeaderNavLink to="/login">Login</HeaderNavLink>
+      <HeaderNavLink to="/register">Register</HeaderNavLink>
+    </Nav>
   );
 
   if (isAuthenticated) {
     content = (
       <>
-        <Nav.Link href="/">Home</Nav.Link>
-        <Nav.Link href="/login">Login</Nav.Link>
-        <Nav.Link href="/register">Register</Nav.Link>
-        <fetcher.Form method="post" action="/logout">
-          <UIButton type="submit" variant="outline-primary" size="md">
-            Logout
-          </UIButton>
-        </fetcher.Form>
+        <Nav className="me-auto flex-row items-center">
+          <HeaderNavLink to="/">Home</HeaderNavLink>
+        </Nav>
+        <Nav className="ms-auto">
+          <fetcher.Form method="post" action="/logout">
+            <UIButton type="submit" variant="outline-light" size="md">
+              Logout
+            </UIButton>
+          </fetcher.Form>
+        </Nav>
       </>
     );
   }
 
   return (
-    <Navbar bg="dark" data-bs-theme="dark">
-      <Container>
+    <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="fixed">
+      <Container fluid>
         <Navbar.Brand href="/">HorFunNy</Navbar.Brand>
-        <Nav className="me-auto">{content}</Nav>
+        <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
+        <Navbar.Offcanvas
+          id="offcanvasNavbar-expand-lg"
+          aria-labelledby="offcanvasNavbarLabel-expand-lg"
+          placement="end"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title id="offcanvasNavbarLabel-expand-lg">
+              Offcanvas
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>{content}</Offcanvas.Body>
+        </Navbar.Offcanvas>
       </Container>
     </Navbar>
   );
