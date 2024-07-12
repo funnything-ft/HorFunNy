@@ -16,6 +16,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, blank=True)
     desc = models.TextField(blank=True)
+    image = models.ImageField(upload_to='profile/',
+                              default='profile/default-profile.jpeg',
+                              blank=True)
 
     FEMALE = 'F'
     MALE = 'M'
@@ -33,6 +36,11 @@ class Profile(models.Model):
         if self.name == '':
             self.name = name
         super(Profile, self).save(*args, **kwargs)
+
+    def get_upload_path(self, filename):
+        ext = filename.split('.')[-1]
+        filename = '%s.%s' % (self.name, ext)
+        return filename
 
 
 def create_user_profile(sender, instance, created, **kwargs):
