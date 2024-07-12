@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 WORKDIR /app/backend
 
 COPY requirements.txt /app/backend/
-RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev
+RUN apk --update --upgrade add gcc musl-dev jpeg-dev zlib-dev libffi-dev cairo-dev pango-dev gdk-pixbuf-dev sqlite-dev
 RUN apk add --virtual .build-deps --no-cache postgresql-dev gcc python3-dev musl-dev && \
         pip install --no-cache-dir -r requirements.txt && \
         apk --purge del .build-deps
