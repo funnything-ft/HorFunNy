@@ -1,15 +1,17 @@
 import React from "react";
 import { Image, Container } from "react-bootstrap";
-import DefaultProfileImage from "../assets/default-profile.jpeg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UIButton from "../components/UIButton";
+import apiInstance from "../utils/axios";
+import { useLoaderData } from "react-router-dom";
 
 function Profile() {
+  const { name, image, desc, user } = useLoaderData();
   return (
-    <Container className="lg:w-1/2 lg:w-1/3 lg:w-1/4">
-      <div className="lg:hidden flex mb-4">
+    <Container className=" lg:w-1/2 md:w-2/3 sm:w-full">
+      <div className="lg:hidden flex justify-end mb-4">
         <UIButton
-          className="w-32 ml-auto"
+          className="w-32 sm:w-36"
           variant="primary"
           size="lg"
           type="button"
@@ -17,30 +19,38 @@ function Profile() {
           Edit
         </UIButton>
       </div>
-      <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-20 space-x-0">
-        <div className="w-40 h-40 lg:w-64 lg:h-64 flex-shrink-0 mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-5 border-b-2 pb-2 items-center sm:items-start">
+        <div className="col-span-1 flex justify-center sm:pe-4">
           <Image
-            src={DefaultProfileImage}
+            src={image}
             roundedCircle
-            className="w-full h-full object-cover"
+            className="object-cover w-32 h-32 sm:w-40 sm:h-40 "
           />
         </div>
-        <div className="flex flex-col justify-center">
-          <h1 className="text-center lg:hidden">Name</h1>
-          <h1 className="hidden lg:block">Name</h1>
-          <p className="text-center lg:hidden">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Perferendis amet recusandae laborum temporibus consequatur neque
-            consequuntur porro quia iure commodi!
-          </p>
-          <p className="hidden lg:block">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            Perferendis amet recusandae laborum temporibus consequatur neque
-            consequuntur porro quia iure commodi!
-          </p>
+        <div className="col-span-3 flex flex-col justify-center">
+          <div className="px-4 text-center md:hidden">
+            <h1 className="text-2xl mb-2">{user.username}</h1>
+            <div className="font-bold text-xl">{name}</div>
+            {desc && <p className="text-sm">{desc}</p>}
+          </div>
+          <div className="px-4 hidden md:block lg:hidden">
+            <h1 className="text-2xl text-3xl mb-2">{user.username}</h1>
+            <div className="font-bold text-xl">{name}</div>
+            {desc && <p className="text-sm">{desc}</p>}
+          </div>
+          <div className="py-3 hidden lg:block">
+            <h1 className="text-2xl text-3xl mb-2">{user.username}</h1>
+            <div className="font-bold text-xl">{name}</div>
+            {desc && <p className="text-sm">{desc}</p>}
+          </div>
         </div>
-        <div className="hidden lg:block flex flex-col">
-          <UIButton className="w-32" variant="primary" size="lg" type="button">
+        <div className="hidden lg:block">
+          <UIButton
+            className="w-32 sm:w-36"
+            variant="primary"
+            size="lg"
+            type="button"
+          >
             Edit
           </UIButton>
         </div>
@@ -50,3 +60,9 @@ function Profile() {
 }
 
 export default Profile;
+
+export function loader() {
+  return apiInstance.get("profile/").then((res) => {
+    return res.data;
+  });
+}
