@@ -5,7 +5,7 @@ import Error from "../pages/Error";
 import Login, { action as loginAction } from "../pages/Login";
 import Register, { action as registerAction } from "../pages/Register";
 import { action as logoutAction } from "../pages/Logout";
-import Profile from "../pages/Profile";
+import Profile, { loader as ProfileLoader } from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +35,7 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+        loader: ProfileLoader,
       },
     ],
   },
