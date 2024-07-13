@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . import serializers
+from . import models, serializers
 
 
 class LoginView(generics.CreateAPIView):
@@ -62,3 +62,13 @@ class LogoutView(APIView):
         logout(request)
         return Response({'message': 'Logged out successfully'},
                         status=status.HTTP_200_OK)
+
+
+class RetrieveProfileView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = serializers.ProfileSerializer
+
+    def get_object(self):
+        user = self.request.user
+        profile = models.Profile.objects.get(user=user)
+        return profile
