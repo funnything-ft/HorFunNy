@@ -11,7 +11,7 @@ from . import models, serializers
 
 class LoginView(generics.CreateAPIView):
     permission_classes = (AllowAny, )
-    serializer_class = serializers.UserSerializer
+    serializer_class = serializers.LoginSerializer
 
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
