@@ -19,6 +19,7 @@ function Header({ isAuthenticated }) {
       <>
         <Nav className="me-auto flex-row items-center">
           <HeaderNavLink to="/">Home</HeaderNavLink>
+          <HeaderNavLink to="/profile">Profile</HeaderNavLink>
         </Nav>
         <Nav className="ms-auto">
           <fetcher.Form method="post" action="/logout">
@@ -32,7 +33,7 @@ function Header({ isAuthenticated }) {
   }
 
   return (
-    <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="fixed">
+    <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="fixed mb-5">
       <Container fluid>
         <Navbar.Brand href="/">HorFunNy</Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-lg" />
