@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import { Table, Container, Image } from "react-bootstrap";
 import { useNavigate, useParams, useRouteLoaderData } from "react-router-dom";
-import ProfileForm from "../components/ProfileForm";
+import ProfileForm, { UpdateProfile } from "../components/ProfileForm";
 import ProfileUploadPhotoForm from "../components/ProfileUploadPhotoForm";
+
+const formActions = {
+  profile: "update-profile",
+  photo: "update-photo",
+};
+const forms = {
+  profile: <ProfileForm action={formActions.profile} />,
+  photo: <ProfileUploadPhotoForm />,
+};
 
 export default function EditProfile() {
   const { image, user } = useRouteLoaderData("profile-detail");
   const { form } = useParams();
   const navigate = useNavigate();
-  const forms = {
-    profile: <ProfileForm />,
-    photo: <ProfileUploadPhotoForm />,
-  };
   const sectionListClass = "hover:bg-slate-200 text-center font-semibold py-2";
   return (
     <Container>
@@ -54,4 +59,18 @@ export default function EditProfile() {
       </Table>
     </Container>
   );
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const action = formData.get("action");
+
+  if (action == formActions.profile) {
+    const data = {
+      name: formData.get("name"),
+      desc: formData.get("desc"),
+      gender: formData.get("gender"),
+    };
+    return UpdateProfile(data);
+  }
 }
