@@ -6,7 +6,7 @@ import Login, { action as loginAction } from "../pages/Login";
 import Register, { action as registerAction } from "../pages/Register";
 import { action as logoutAction } from "../pages/Logout";
 import Profile, { loader as ProfileLoader } from "../pages/Profile";
-import EditProfile from "../pages/EditProfile";
+import EditProfile, { action as EditProfileAction } from "../pages/EditProfile";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +45,7 @@ const router = createBrowserRouter([
           {
             path: "edit/:form",
             element: <EditProfile />,
+            action: EditProfileAction,
           },
         ],
       },
