@@ -72,3 +72,11 @@ class RetrieveProfileView(generics.RetrieveAPIView):
         user = self.request.user
         profile = models.Profile.objects.get(user=user)
         return profile
+
+
+class UpdateProfileImage(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = serializers.ProfileImageSerializer
+
+    def get_object(self):
+        return self.request.user.profile
