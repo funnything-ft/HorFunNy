@@ -43,7 +43,7 @@ const router = createBrowserRouter([
             element: <Profile />,
           },
           {
-            path: "edit",
+            path: "edit/:form",
             element: <EditProfile />,
           },
         ],
