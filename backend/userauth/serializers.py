@@ -57,3 +57,10 @@ class ProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ['image']
+
+
+class UpdateProfileDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['name', 'desc', 'gender']
