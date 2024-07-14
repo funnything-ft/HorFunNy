@@ -15,4 +15,7 @@ urlpatterns = [
     path('profile/edit/image',
          views.UpdateProfileImage.as_view(),
          name='edit_profile_image'),
+    path('profile/edit/detail',
+         views.UpdateProfileDetail.as_view(),
+         name='edit_profile_detail'),
 ]
