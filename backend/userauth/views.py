@@ -80,3 +80,11 @@ class UpdateProfileImage(generics.UpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+
+
+class UpdateProfileDetail(generics.UpdateAPIView):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = serializers.UpdateProfileDetailSerializer
+
+    def get_object(self):
+        return self.request.user.profile
