@@ -3,17 +3,13 @@ import { Image, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UIButton from "../components/UIButton";
 import apiInstance from "../utils/axios";
-import {
-  useLoaderData,
-  useNavigate,
-  useRouteLoaderData,
-} from "react-router-dom";
+import { useNavigate, useRouteLoaderData } from "react-router-dom";
 
 function Profile() {
   const navigate = useNavigate();
   const { name, image, desc, user } = useRouteLoaderData("profile-detail");
   return (
-    <Container className=" lg:w-1/2 md:w-2/3 sm:w-full">
+    <Container className="lg:w-1/2 md:w-2/3 sm:w-full">
       <div className="lg:hidden flex justify-end mb-4">
         <UIButton
           className="w-32 sm:w-36"
@@ -55,7 +51,7 @@ function Profile() {
             variant="primary"
             size="lg"
             type="button"
-            onClick={() => navigate("edit")}
+            onClick={() => navigate("edit/profile")}
           >
             Edit
           </UIButton>
