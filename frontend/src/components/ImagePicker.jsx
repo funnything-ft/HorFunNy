@@ -5,7 +5,7 @@ import UIButton from "./UIButton";
 import DefaultProfileImage from "../assets/default-profile.jpeg";
 
 function ImagePicker({ label, name }) {
-  const [pickedImage, setPickedImage] = useState();
+  const profilePic = useRef();
   const imageInput = useRef();
 
   function handlePickClick() {
@@ -14,37 +14,22 @@ function ImagePicker({ label, name }) {
 
   function handleImageChange(e) {
     const file = e.target.files[0];
-    if (!file) {
-      setPickedImage(null);
-      return;
+    if (file) {
+      profilePic.current.src = URL.createObjectURL(file);
     }
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPickedImage(fileReader.result);
-    };
-    fileReader.readAsDataURL(file);
   }
 
   return (
     <Form.Group controlId={name}>
       <Form.Label className="font-bold mb-4">{label}</Form.Label>
       <div className="mb-4 w-50 mx-auto">
-        {!pickedImage && (
-          <Image
-            src={DefaultProfileImage}
-            alt="default image"
-            className="object-cover w-full"
-            onClick={handlePickClick}
-          />
-        )}
-        {pickedImage && (
-          <Image
-            src={pickedImage}
-            alt="Image selected by user"
-            className="object-cover w-full"
-            onClick={handlePickClick}
-          />
-        )}
+        <Image
+          src={DefaultProfileImage}
+          alt="profile picture"
+          className="object-cover w-full"
+          onClick={handlePickClick}
+          ref={profilePic}
+        />
       </div>
       <Form.Control
         type="file"
