@@ -7,7 +7,7 @@ import HeaderNavLink from "./HeaderNavLink";
 function Header({ isAuthenticated }) {
   const fetcher = useFetcher();
   let content = (
-    <Nav className="me-auto flex-row items-center">
+    <Nav className="me-auto flex-col items-center gap-3">
       <HeaderNavLink to="/">Home</HeaderNavLink>
       <HeaderNavLink to="/login">Login</HeaderNavLink>
       <HeaderNavLink to="/register">Register</HeaderNavLink>
@@ -17,11 +17,9 @@ function Header({ isAuthenticated }) {
   if (isAuthenticated) {
     content = (
       <>
-        <Nav className="me-auto flex-row items-center">
+        <Nav className="me-auto flex-col items-center gap-3">
           <HeaderNavLink to="/">Home</HeaderNavLink>
           <HeaderNavLink to="/profile">Profile</HeaderNavLink>
-        </Nav>
-        <Nav className="ms-auto">
           <fetcher.Form method="post" action="/logout">
             <UIButton type="submit" variant="outline-light" size="md">
               Logout
@@ -42,12 +40,19 @@ function Header({ isAuthenticated }) {
           aria-labelledby="offcanvasNavbarLabel-expand-lg"
           placement="end"
         >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel-expand-lg">
-              Offcanvas
+          <Offcanvas.Header
+            closeButton
+            className="bg-dark"
+            closeVariant="white"
+          >
+            <Offcanvas.Title
+              id="offcanvasNavbarLabel-expand-lg"
+              className="text-white ml-3"
+            >
+              Menu
             </Offcanvas.Title>
           </Offcanvas.Header>
-          <Offcanvas.Body>{content}</Offcanvas.Body>
+          <Offcanvas.Body className="bg-dark">{content}</Offcanvas.Body>
         </Navbar.Offcanvas>
       </Container>
     </Navbar>
