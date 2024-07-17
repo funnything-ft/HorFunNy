@@ -1,11 +1,7 @@
-import React from "react";
-import { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Form, Image } from "react-bootstrap";
-import UIButton from "./UIButton";
-import DefaultProfileImage from "../assets/default-profile.jpeg";
 
-function ImagePicker({ label, name }) {
-  const profilePic = useRef();
+function ImagePicker({ label, name, onImageSelected, image }) {
   const imageInput = useRef();
 
   function handlePickClick() {
@@ -15,7 +11,7 @@ function ImagePicker({ label, name }) {
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
-      profilePic.current.src = URL.createObjectURL(file);
+      onImageSelected(URL.createObjectURL(file));
     }
   }
 
@@ -24,32 +20,21 @@ function ImagePicker({ label, name }) {
       <Form.Label className="font-bold mb-4">{label}</Form.Label>
       <div className="mb-4 w-50 mx-auto">
         <Image
-          src={DefaultProfileImage}
+          src={image}
           alt="profile picture"
           className="object-cover w-full"
           onClick={handlePickClick}
-          ref={profilePic}
         />
       </div>
       <Form.Control
         type="file"
-        accept="image/png, image/jpeg"
+        accept="image/png, image/jpeg, image/jpg, image/webp"
         name={name}
         ref={imageInput}
         required
         onChange={handleImageChange}
         className="mb-4 !hidden"
       />
-      <div className="text-center">
-        <UIButton
-          className="w-32 mb-4 mx-auto"
-          variant="primary"
-          size="md"
-          type="button"
-        >
-          Save
-        </UIButton>
-      </div>
     </Form.Group>
   );
 }

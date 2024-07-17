@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Table, Container, Image } from "react-bootstrap";
 import { useNavigate, useParams, useRouteLoaderData } from "react-router-dom";
 import ProfileForm, { UpdateProfile } from "../components/ProfileForm";
-import ProfileUploadPhotoForm from "../components/ProfileUploadPhotoForm";
+import ProfileUploadPhotoForm, {
+  UploadPhoto,
+} from "../components/ProfileUploadPhotoForm";
 
 const formActions = {
   profile: "update-profile",
@@ -10,7 +12,7 @@ const formActions = {
 };
 const forms = {
   profile: <ProfileForm action={formActions.profile} />,
-  photo: <ProfileUploadPhotoForm />,
+  photo: <ProfileUploadPhotoForm action={formActions.photo} />,
 };
 
 export default function EditProfile() {
@@ -72,5 +74,10 @@ export async function action({ request }) {
       gender: formData.get("gender"),
     };
     return UpdateProfile(data);
+  } else if (action == formActions.photo) {
+    const data = {
+      image: formData.get("image"),
+    };
+    return UploadPhoto(data);
   }
 }
