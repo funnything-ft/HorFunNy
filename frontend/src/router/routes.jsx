@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout, { checkSessionExpiration } from "../pages/Layout";
+import Layout, { CheckSessionExpiration } from "../pages/Layout";
 import Home from "../pages/Home";
 import Error from "../pages/Error";
 import Login, { action as loginAction } from "../pages/Login";
@@ -7,13 +7,14 @@ import Register, { action as registerAction } from "../pages/Register";
 import { action as logoutAction } from "../pages/Logout";
 import Profile, { loader as ProfileLoader } from "../pages/Profile";
 import EditProfile, { action as EditProfileAction } from "../pages/EditProfile";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     errorElement: <Error />,
-    loader: checkSessionExpiration,
+    loader: CheckSessionExpiration,
     children: [
       {
         index: true,
@@ -40,11 +41,19 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Profile />,
+            element: (
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "edit/:form",
-            element: <EditProfile />,
+            element: (
+              <ProtectedRoute>
+                <EditProfile />
+              </ProtectedRoute>
+            ),
             action: EditProfileAction,
           },
         ],

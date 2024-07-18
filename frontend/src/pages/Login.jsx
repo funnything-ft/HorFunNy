@@ -4,6 +4,8 @@ import { Container } from "react-bootstrap";
 import apiInstance from "../utils/axios";
 import UIInput from "../components/UIInput";
 import UIButton from "../components/UIButton";
+import { authActions } from "../store/auth-slice";
+import { dispatch } from "../store";
 
 function Login() {
   const data = useActionData();
@@ -50,7 +52,7 @@ function Login() {
 
 export default Login;
 
-export async function action({ request, params }) {
+export async function action({ request }) {
   const data = await request.formData();
 
   const credential = {
@@ -62,9 +64,9 @@ export async function action({ request, params }) {
     .post("login/", credential)
     .then((response) => {
       if (response.status === 200) {
+        dispatch(authActions.login());
         return redirect("/");
       } else if (response.status === 401) {
-        console.log(response.data.message);
         return response;
       }
     })

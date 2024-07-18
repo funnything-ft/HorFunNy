@@ -1,13 +1,14 @@
 import React from "react";
 import Header from "../components/Header";
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import apiInstance from "../utils/axios";
+import { dispatch } from "../store";
+import { authActions } from "../store/auth-slice";
 
 function Layout() {
-  const { isAuthenticated } = useLoaderData();
   return (
     <>
-      <Header isAuthenticated={isAuthenticated} />
+      <Header />
       <main>
         <Outlet />
       </main>
@@ -17,8 +18,11 @@ function Layout() {
 
 export default Layout;
 
-export function checkSessionExpiration() {
+export function CheckSessionExpiration() {
   return apiInstance.get("login/").then((res) => {
-    return res.data;
+    if (res.data.isAuthenticated) {
+      return dispatch(authActions.login());
+    }
+    return null;
   });
 }

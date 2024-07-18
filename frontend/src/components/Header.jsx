@@ -3,9 +3,11 @@ import { Container, Navbar, Nav, Offcanvas } from "react-bootstrap";
 import { useFetcher } from "react-router-dom";
 import UIButton from "./UIButton";
 import HeaderNavLink from "./HeaderNavLink";
+import { useSelector } from "react-redux";
 
-function Header({ isAuthenticated }) {
+function Header() {
   const fetcher = useFetcher();
+  const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
   let content = (
     <Nav className="me-auto flex-col items-center gap-3">
       <HeaderNavLink to="/">Home</HeaderNavLink>
