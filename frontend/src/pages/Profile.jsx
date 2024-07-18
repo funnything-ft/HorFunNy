@@ -3,7 +3,7 @@ import { Image, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UIButton from "../components/UIButton";
 import apiInstance from "../utils/axios";
-import { useNavigate, useRouteLoaderData } from "react-router-dom";
+import { useNavigate, useRouteLoaderData, json } from "react-router-dom";
 
 function Profile() {
   const navigate = useNavigate();
@@ -63,8 +63,13 @@ function Profile() {
 
 export default Profile;
 
-export function loader() {
-  return apiInstance.get("profile/").then((res) => {
-    return res.data;
-  });
+export async function loader() {
+  return apiInstance
+    .get("profile/")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      throw json({ message: err.response.data.message }, { status: 500 });
+    });
 }
