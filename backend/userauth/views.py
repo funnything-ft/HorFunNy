@@ -28,27 +28,9 @@ class LoginView(generics.CreateAPIView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            expiry_timestamp = request.session.get_expiry_date()
-            time_remaining = (expiry_timestamp -
-                              timezone.now()).total_seconds()
-            return Response(
-                {
-                    'isAuthenticated': True,
-                    'time_remaining': time_remaining
-                },
-                status=status.HTTP_200_OK)
+            return Response({'isAuthenticated': True})
         else:
-            return Response({'isAuthenticated': False},
-                            status=status.HTTP_401_UNAUTHORIZED)
-
-
-class RefreshSessionView(APIView):
-    permission_classes = (IsAuthenticated, )
-
-    def post(self, request):
-        request.session.set_expiry(settings.SESSION_COOKIE_AGE)
-        session_expiry = request.session.get_expiry_date()
-        return Response({'session_expiration': session_expiry}, status=200)
+            return Response({'isAuthenticated': False})
 
 
 class RegisterView(generics.CreateAPIView):
