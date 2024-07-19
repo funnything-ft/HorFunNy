@@ -1,5 +1,7 @@
 import axios from "axios";
 import { API_BASE_URL } from "./constants";
+import { dispatch } from "../store";
+import { authActions } from "../store/auth-slice";
 
 const apiInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -45,6 +47,9 @@ apiInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
+      if (error.response.status === 403) {
+        dispatch(authActions.sessionExpired());
+      }
       return Promise.resolve(error.response);
     } else {
       return Promise.reject(error);
