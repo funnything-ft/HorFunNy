@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     # custom app
     'userauth',
+    'multimedia',
 
     # third party app
     'rest_framework',
