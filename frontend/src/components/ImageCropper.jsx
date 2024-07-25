@@ -23,6 +23,29 @@ const ImageCropper = forwardRef(function ImageCropper(
         restore={false}
         autoCrop={true}
         autoCropArea={1}
+        ready={(event) => {
+          const cropper = event.currentTarget.cropper;
+          cropper.setCropBoxData({
+            left:
+              (cropper.getContainerData().width -
+                cropper.getCropBoxData().width) /
+              2,
+            top:
+              (cropper.getContainerData().height -
+                cropper.getCropBoxData().height) /
+              2,
+          });
+          cropper.setCanvasData({
+            left:
+              (cropper.getContainerData().width -
+                cropper.getCanvasData().width) /
+              2,
+            top:
+              (cropper.getContainerData().height -
+                cropper.getCanvasData().height) /
+              2,
+          });
+        }}
         {...props}
       />
     </div>
