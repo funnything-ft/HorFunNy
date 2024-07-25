@@ -92,44 +92,41 @@ function ProfileUploadPhotoForm({ action }) {
   return (
     <Form onSubmit={handleSubmit}>
       <div className="p-10">
-        <UIModal centered show={isCrop}>
-          <Modal.Header>
-            <Modal.Title>Crop Profile Image</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <ImageCropper
-              image={selectedImage}
-              zoomTo={zoom}
-              ref={cropperRef}
-            />
-            <input
-              type="range"
-              min="0.1"
-              max="3"
-              step="0.01"
-              value={zoom}
-              onChange={handleZoom}
-              className="mt-4 w-full"
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <UIButton
-              onClick={handleCropImage}
-              variant="primary"
-              size="md"
-              type="button"
-            >
-              Crop
-            </UIButton>
-            <UIButton
-              onClick={handleCloseModal}
-              variant="primary"
-              size="md"
-              type="button"
-            >
-              Cancel
-            </UIButton>
-          </Modal.Footer>
+        <UIModal
+          centered
+          show={isCrop}
+          title="Crop Profile Image"
+          footer={
+            <>
+              <UIButton
+                onClick={handleCropImage}
+                variant="primary"
+                size="md"
+                type="button"
+              >
+                Crop
+              </UIButton>
+              <UIButton
+                onClick={handleCloseModal}
+                variant="primary"
+                size="md"
+                type="button"
+              >
+                Cancel
+              </UIButton>
+            </>
+          }
+        >
+          <ImageCropper image={selectedImage} zoomTo={zoom} ref={cropperRef} />
+          <input
+            type="range"
+            min="0.1"
+            max="3"
+            step="0.01"
+            value={zoom}
+            onChange={handleZoom}
+            className="mt-4 w-full"
+          />
         </UIModal>
         <p className="font-bold">Add / Change image</p>
         <FileInput
