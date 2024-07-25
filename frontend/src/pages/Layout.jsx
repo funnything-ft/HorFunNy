@@ -19,23 +19,24 @@ function Layout() {
   }
   return (
     <>
-      <UIModal show={showSessionExpired} centered>
-        <Modal.Header>
-          <Modal.Title>Session Expired</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Your session has expired. Please log in again.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <UIButton
-            onClick={handleCloseModal}
-            variant="primary"
-            size="lg"
-            type="submit"
-          >
-            Sign In
-          </UIButton>
-        </Modal.Footer>
+      <UIModal
+        show={showSessionExpired}
+        centered
+        title="Session Expired"
+        footer={
+          <>
+            <UIButton
+              onClick={handleCloseModal}
+              variant="primary"
+              size="lg"
+              type="submit"
+            >
+              Sign In
+            </UIButton>
+          </>
+        }
+      >
+        <p>Your session has expired. Please log in again.</p>
       </UIModal>
       <Header />
       <main>
