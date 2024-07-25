@@ -26,8 +26,12 @@ export default function EditProfile() {
         <tbody>
           <tr>
             <td rowSpan={2} className="w-56">
-              <div className="w-14 mx-auto mt-4">
-                <Image src={image} roundedCircle className="object-cover" />
+              <div className="w-12 mx-auto mt-4">
+                <Image
+                  src={image}
+                  roundedCircle
+                  className="object-cover w-12 h-12"
+                />
               </div>
               <p className="text-center font-bold">{user.username}</p>
               <ul className="p-0 grid grid-cols gap-2">
