@@ -3,7 +3,15 @@ import { Image, Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UIButton from "../components/UIButton";
 import apiInstance from "../utils/axios";
-import { useNavigate, useRouteLoaderData, json, Link } from "react-router-dom";
+import {
+  useNavigate,
+  useRouteLoaderData,
+  json,
+  Link,
+  Form,
+  useSubmit,
+  redirect,
+} from "react-router-dom";
 import UIModal from "../components/UIModal";
 import FileInput from "../components/FileInput";
 import ImageCropper from "../components/ImageCropper";
@@ -18,6 +26,7 @@ const imageRatio = {
 
 function Profile() {
   const navigate = useNavigate();
+  const submit = useSubmit();
   const { name, image, desc, user } = useRouteLoaderData("profile-detail");
   const [caption, setCaption] = useState("");
   const [showNewPostModal, setShowNewPostModal] = useState(false);
@@ -54,6 +63,27 @@ function Profile() {
     }
   }
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    const cropper = cropperRef.current.cropper;
+    const formData = new FormData();
+    if (cropper) {
+      const canvas = cropper.getCroppedCanvas();
+      canvas.toBlob((blob) => {
+        const file = new File([blob], "post.png", { type: "image/png" });
+        formData.append("image", file);
+        formData.append("caption", caption);
+        submit(formData, {
+          method: "POST",
+          encType: "multipart/form-data",
+        });
+      });
+    }
+    setSelectedImage(null);
+    setCaption("");
+    setShowNewPostModal(false);
+  }
+
   return (
     <Container className="lg:w-1/2 md:w-2/3 sm:w-full">
       <UIModal
@@ -64,9 +94,6 @@ function Profile() {
         title="New Post"
         footer={
           <>
-            <UIButton variant="primary" size="md" type="button">
-              Post
-            </UIButton>
             <UIButton
               onClick={() => setShowNewPostModal(false)}
               variant="primary"
@@ -75,6 +102,11 @@ function Profile() {
             >
               Cancel
             </UIButton>
+            <Form onSubmit={handleSubmit}>
+              <UIButton variant="primary" size="md" type="submit">
+                Post
+              </UIButton>
+            </Form>
           </>
         }
       >
@@ -204,6 +236,24 @@ export async function loader() {
     .get("profile/")
     .then((res) => {
       return res.data;
+    })
+    .catch((err) => {
+      throw json({ message: err.response.data.message }, { status: 500 });
+    });
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const data = {
+    image: formData.get("image"),
+    caption: formData.get("caption"),
+  };
+  return apiInstance
+    .post("post/create/", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((res) => {
+      return redirect("/profile");
     })
     .catch((err) => {
       throw json({ message: err.response.data.message }, { status: 500 });
