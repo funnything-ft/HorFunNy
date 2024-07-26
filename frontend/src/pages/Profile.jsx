@@ -17,11 +17,19 @@ import FileInput from "../components/FileInput";
 import ImageCropper from "../components/ImageCropper";
 import UISelectInput from "../components/UISelectInput";
 import UITextareaInput from "../components/UITextareaInput";
+import DefaultProfileImage from "../assets/default-profile.jpeg";
+import ProfilePostGrid from "../components/ProfilePostGrid";
+import ProfilePost from "../components/ProfilePost";
 
 const imageRatio = {
   "1:1": 1,
   "4:5": 4 / 5,
   "16:9": 16 / 9,
+};
+
+const TABS = {
+  Posts: "post",
+  Reels: "reel",
 };
 
 function Profile() {
@@ -33,6 +41,7 @@ function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [zoom, setZoom] = useState(1);
   const [aspectRatio, setAspectRatio] = useState(1);
+  const [selectedType, setSelectedType] = useState("post");
   const imageInputRef = useRef();
   const cropperRef = useRef(null);
 
@@ -61,6 +70,10 @@ function Profile() {
     if (cropper) {
       cropper.setAspectRatio(e.target.value);
     }
+  }
+
+  function handleSelectType(type) {
+    setSelectedType(type);
   }
 
   function handleSubmit(e) {
@@ -225,6 +238,13 @@ function Profile() {
           </UIButton>
         </div>
       </div>
+      <ProfilePostGrid
+        selectedType={selectedType}
+        onSelectType={handleSelectType}
+        tabs={TABS}
+      >
+        <ProfilePost image={DefaultProfileImage} />
+      </ProfilePostGrid>
     </Container>
   );
 }
