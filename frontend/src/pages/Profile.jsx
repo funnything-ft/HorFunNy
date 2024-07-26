@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Image, Container } from "react-bootstrap";
+import React, { Suspense, useRef, useState } from "react";
+import { Container } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UIButton from "../components/UIButton";
 import apiInstance from "../utils/axios";
@@ -11,15 +11,18 @@ import {
   Form,
   useSubmit,
   redirect,
+  defer,
+  Await,
 } from "react-router-dom";
 import UIModal from "../components/UIModal";
 import FileInput from "../components/FileInput";
 import ImageCropper from "../components/ImageCropper";
 import UISelectInput from "../components/UISelectInput";
 import UITextareaInput from "../components/UITextareaInput";
-import DefaultProfileImage from "../assets/default-profile.jpeg";
-import ProfilePostGrid from "../components/ProfilePostGrid";
-import ProfilePost from "../components/ProfilePost";
+import ProfilePostGrid, {
+  retrieveUserPost,
+} from "../components/ProfilePostGrid";
+import UserProfile from "../components/UserProfile";
 
 const imageRatio = {
   "1:1": 1,
@@ -35,7 +38,8 @@ const TABS = {
 function Profile() {
   const navigate = useNavigate();
   const submit = useSubmit();
-  const { name, image, desc, user } = useRouteLoaderData("profile-detail");
+  const data = useRouteLoaderData("profile-detail");
+  const { profile, post } = data;
   const [caption, setCaption] = useState("");
   const [showNewPostModal, setShowNewPostModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -173,85 +177,39 @@ function Profile() {
           )}
         </div>
       </UIModal>
-      <div className="lg:hidden flex justify-end mb-4 gap-2">
-        <UIButton
-          className="w-32 sm:w-36"
-          variant="primary"
-          size="lg"
-          type="button"
-        >
-          Edit
-        </UIButton>
-        <UIButton
-          className="w-32 sm:w-36"
-          variant="primary"
-          size="lg"
-          type="button"
-          onClick={() => setShowNewPostModal(true)}
-        >
-          New Post
-        </UIButton>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-5 border-b-2 pb-2 items-center sm:items-start">
-        <div className="col-span-1 flex justify-center sm:pe-4">
-          <Image
-            src={image}
-            roundedCircle
-            className="object-cover w-32 h-32 sm:w-40 sm:h-40 "
-          />
-        </div>
-        <div className="col-span-3 flex flex-col justify-center">
-          <div className="px-4 text-center md:hidden">
-            <h1 className="text-2xl mb-2">{user.username}</h1>
-            <div className="font-bold text-xl">{name}</div>
-            {desc && <p className="text-sm">{desc}</p>}
-          </div>
-          <div className="px-4 hidden md:block lg:hidden">
-            <h1 className="text-2xl text-3xl mb-2">{user.username}</h1>
-            <div className="font-bold text-xl">{name}</div>
-            {desc && <p className="text-sm">{desc}</p>}
-          </div>
-          <div className="py-3 hidden lg:block">
-            <h1 className="text-2xl text-3xl mb-2">{user.username}</h1>
-            <div className="font-bold text-xl">{name}</div>
-            {desc && <p className="text-sm">{desc}</p>}
-          </div>
-        </div>
-        <div className="hidden lg:block">
-          <UIButton
-            className="w-32 sm:w-36"
-            variant="primary"
-            size="lg"
-            type="button"
-            onClick={() => navigate("edit/profile")}
-          >
-            Edit
-          </UIButton>
-          <UIButton
-            className="w-32 sm:w-36 mt-3"
-            variant="primary"
-            size="lg"
-            type="button"
-            onClick={() => setShowNewPostModal(true)}
-          >
-            New Post
-          </UIButton>
-        </div>
-      </div>
-      <ProfilePostGrid
-        selectedType={selectedType}
-        onSelectType={handleSelectType}
-        tabs={TABS}
-      >
-        <ProfilePost image={DefaultProfileImage} />
-      </ProfilePostGrid>
+      <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
+        <Await resolve={profile}>
+          {(profile) => {
+            return (
+              <UserProfile
+                profile={profile}
+                setShowNewPostModal={setShowNewPostModal}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
+      <Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
+        <Await resolve={post}>
+          {(posts) => {
+            return (
+              <ProfilePostGrid
+                posts={posts}
+                selectedType={selectedType}
+                onSelectType={handleSelectType}
+                tabs={TABS}
+              />
+            );
+          }}
+        </Await>
+      </Suspense>
     </Container>
   );
 }
 
 export default Profile;
 
-export async function loader() {
+function retrieveProfile() {
   return apiInstance
     .get("profile/")
     .then((res) => {
@@ -260,6 +218,13 @@ export async function loader() {
     .catch((err) => {
       throw json({ message: err.response.data.message }, { status: 500 });
     });
+}
+
+export async function loader() {
+  return defer({
+    profile: await retrieveProfile(),
+    post: await retrieveUserPost(),
+  });
 }
 
 export async function action({ request }) {
