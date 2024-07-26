@@ -13,7 +13,9 @@ const genderOptions = {
 };
 
 function ProfileForm({ action }) {
-  const { name, desc, gender } = useRouteLoaderData("profile-detail");
+  const data = useRouteLoaderData("profile-detail");
+  const { profile } = data;
+  const { name, desc, gender } = profile;
   const [userInput, setUserInput] = useState({
     name,
     desc,

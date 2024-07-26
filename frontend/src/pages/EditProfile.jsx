@@ -1,6 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Table, Container, Image } from "react-bootstrap";
-import { useNavigate, useParams, useRouteLoaderData } from "react-router-dom";
+import {
+  Await,
+  useNavigate,
+  useParams,
+  useRouteLoaderData,
+} from "react-router-dom";
 import ProfileForm, { UpdateProfile } from "../components/ProfileForm";
 import ProfileUploadPhotoForm, {
   UploadPhoto,
@@ -16,7 +21,8 @@ const forms = {
 };
 
 export default function EditProfile() {
-  const { image, user } = useRouteLoaderData("profile-detail");
+  const data = useRouteLoaderData("profile-detail");
+  const { profile } = data;
   const { form } = useParams();
   const navigate = useNavigate();
   const sectionListClass = "hover:bg-slate-200 text-center font-semibold py-2";
@@ -26,14 +32,28 @@ export default function EditProfile() {
         <tbody>
           <tr>
             <td rowSpan={2} className="w-56">
-              <div className="w-12 mx-auto mt-4">
-                <Image
-                  src={image}
-                  roundedCircle
-                  className="object-cover w-12 h-12"
-                />
-              </div>
-              <p className="text-center font-bold">{user.username}</p>
+              <Suspense
+                fallback={<p style={{ textAlign: "center" }}>Loading...</p>}
+              >
+                <Await resolve={profile}>
+                  {(profile) => {
+                    return (
+                      <>
+                        <div className="w-12 mx-auto mt-4">
+                          <Image
+                            src={profile.image}
+                            roundedCircle
+                            className="object-cover w-12 h-12"
+                          />
+                        </div>
+                        <p className="text-center font-bold">
+                          {profile.user.username}
+                        </p>
+                      </>
+                    );
+                  }}
+                </Await>
+              </Suspense>
               <ul className="p-0 grid grid-cols gap-2">
                 <li
                   className={`${sectionListClass} ${
