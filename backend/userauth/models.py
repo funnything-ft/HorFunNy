@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
+    otp_secret = models.CharField(max_length=32, blank=True)
 
     REQUIRED_FIELDS = ['email']
 
