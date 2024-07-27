@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . import models, serializers
+from .utils.send_email_otp import generate_secret_key, send_email_otp
 
 
 class LoginView(generics.CreateAPIView):
@@ -36,6 +37,12 @@ class LoginView(generics.CreateAPIView):
 class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny, )
     serializer_class = serializers.RegisterSerializer
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        user.otp_secret = generate_secret_key()
+        user.save()
+        send_email_otp(user.email, user.otp_secret)
 
 
 class LogoutView(APIView):
