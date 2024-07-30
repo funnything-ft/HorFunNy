@@ -11,6 +11,7 @@ import Profile, {
 } from "../pages/Profile";
 import EditProfile, { action as EditProfileAction } from "../pages/EditProfile";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Otp from "../pages/Otp";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "otp",
+        element: <Otp />,
       },
       {
         path: "login",
