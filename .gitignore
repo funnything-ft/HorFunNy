@@ -4,3 +4,4 @@ backend/static
 backend/media
 yarn.lock
 backend/db.sqlite3
+.env
